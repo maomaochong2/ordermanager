@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="text-align: center">
+<br>
+<div style="text-align: center" >
+    <a href="/toaddfood">新增菜品</a><br><br><br>
+    菜名:<input id="foodname" type="text"/><input onclick="findByfoodname()" type="button" value="查询">&nbsp;
+    类别：<input type="text"/><input  type="button" value="查询">
+<table style="text-align: center ;margin:auto" id="list" border="1" cellspacing="0">
+    <tr>
+        <th>序号</th>
+        <th>菜名</th>
+        <th>类别</th>
+        <th>单价</th>
+        <th>麻辣程度</th>
+        <th>可否打包</th>
+        <th>好评程度</th>
+        <th>已售数量</th>
+        <th>其他说明</th>
+        <th>操作</th>
+    </tr>
+    <tbody id="tbodydata"></tbody>
+</table>
+</div>
+</div>
+</body>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script>
+    $(function(){
+        var res = $.ajax({
+            url:"/findlist",
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+                render.list(data);
+            }
+        });
+    });
+    //封装
+    var render = {
+        list:function (data) {
+            var html = '';
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                html += "<tr >" +
+                    "<td >"+data[i].foodid+"</td>\n" +
+                    "<td >"+data[i].foodname+"</td>\n" +
+                    "<td >"+data[i].type+"</td>\n" +
+                    "<td >"+data[i].price+"</td>\n" +
+                    "<td >"+data[i].spicydegree+"</td>\n" +
+                    "<td >"+data[i].ispackage+"</td>\n" +
+                    "<td >"+data[i].hotlevel+"</td>\n" +
+                    "<td >"+data[i].selectedcount+"</td>\n" +
+                    "<td >"+data[i].note+"</td>\n" +
+                    "<td>"+
+                    "<a href=\"/toupdatefood?foodid="+data[i].foodid+"\">修改</a>&nbsp;&nbsp;\n"
+                    +"<input type='button' id='delBtn' value='删除' onclick='del("+data[i].foodid+")'/>"+"</td>"+
+                    "</tr>\n";
+            }
+            $("#tbodydata").html(html);
+        }
+    };
+    //删除
+    function del(foodid){
+        $.ajax({
+            type:"get",
+            url:"/deletefood/"+foodid,
+            dataType:"json",
+            success:function(data){
+                alert("删除成功");
+                render.list(data);
+            },
+            error:function (data) {
+                alert("删除失败");
+            }
+        });
+    };
+    //按名称查找
+    function findByfoodname(){
+        var foodname = $("#foodname").val();
+        var res = $.ajax({
+            url:"/findByfoodname/"+foodname,
+            type:"get",
+            dataType:"json",
+            success:function (data){
+                render.list(data);
+            },
+        });
+    };
+</script>
+</html>

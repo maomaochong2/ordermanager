@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增菜品</title>
+</head>
+<body>
+<div>
+    <input value="foodid"  name="foodid" type="hidden" required>
+    菜名:<input name="foodname" ><br>
+    类别:<input name="type" ><br>
+    单价:<input name="price" ><br>
+    麻辣程度:<input name="spicydegree" ><br>
+    可否打包:<input name="ispackage" ><br>
+    好评程度:<input name="hotlevel" ><br>
+    已售数量:<input name="selectedcount" ><br>
+    其他说明:<input name="note" ><br>
+
+    <input onclick="upd()" type="button" value="确定" />
+</div>
+</body>
+</html>
+<script src="js/jquery-1.12.4.min.js" ></script>
+<script>
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    $(function get() {
+        var foodid = GetQueryString("foodid");
+
+        $.ajax({
+            url:'/findById/'+foodid,
+            type:"get",
+            async:false,
+            dataType:"json",
+            success:function(data){
+                $("input[name='foodid']").val(data.foodid);
+                $("input[name='foodname']").val(data.foodname);
+                $("input[name='type']").val(data.type);
+                $("input[name='price']").val(data.price);
+                $("input[name='spicydegree']").val(data.spicydegree);
+                $("input[name='ispackage']").val(data.ispackage);
+                $("input[name='hotlevel']").val(data.hotlevel);
+                $("input[name='selectedcount']").val(data.selectedcount);
+                $("input[name='note']").val(data.note);
+            },
+            error:function (data) {
+                alert("search error");
+            }
+        });
+    });
+    //修改
+    function upd() {
+        var foodid=$("input[name='foodid']").val();
+        var foodname=$("input[name='foodname']").val();
+        var type=$("input[name='type']").val();
+        var price=$("input[name='price']").val();
+        var spicydegree=$("input[name='spicydegree']").val();
+        var ispackage=$("input[name='ispackage']").val();
+        var hotlevel=$("input[name='hotlevel']").val();
+        var selectedcount=$("input[name='selectedcount']").val();
+        var note=$("input[name='note']").val();
+        $.ajax({
+            url:'/updatefood/',
+            type:"put",
+            async:false,
+            data:{foodid:foodid,foodname:foodname,type:type,price:price,spicydegree:spicydegree,
+                ispackage:ispackage,hotlevel:hotlevel,selectedcount:selectedcount, note:note},
+            dataType:"json",
+            success:function(data){
+                console.log(data);
+                if(data != 0){
+                    alert("修改成功");
+                    window.location.href='/foodinfo';
+                }else{
+                    alert("修改失败");
+                }
+            },
+            error:function (data) {
+                alert("修改失败");
+            }
+        });
+    };
+</script>

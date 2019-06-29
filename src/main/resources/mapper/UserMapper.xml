@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+	<!-- 插入用户数据 -->
+	<!-- Integer addnew(User user); -->
+	<insert id="addnew"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO t_user (
+			username, password,
+			salt, gender,
+			phone, email,
+			avatar, isDelete,
+			createdUser, createdTime,
+			modifiedUser, modifiedTime
+		) VALUES (
+			#{username}, #{password},
+			#{salt}, #{gender},
+			#{phone}, #{email},
+			#{avatar}, #{isDelete},
+			#{createdUser}, #{createdTime},
+			#{modifiedUser}, #{modifiedTime}
+		)
+	</insert>
+	
+	<!-- 根据用户名查询用户数据 -->
+	<!-- User findByUsername(String username) -->
+	<select id="findByUsername"
+		resultType="com.example.demo.entity.User">
+		SELECT 
+			id, username,
+			password, salt,
+			avatar, isDelete
+		FROM 
+			t_user 
+		WHERE 
+			username=#{username}
+	</select>
+
+</mapper>
+
+
+
+
+
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增菜品</title>
+</head>
+<body>
+<div>
+    菜名:<input name="foodname" ><br><br>
+    类别:<br><br>
+    <!--<input name="type" ><br>-->
+    <!--<select name="type" id="id_select">-->
+        <!--<option value ="甜食点心">甜食点心 </option>-->
+        <!--<option value ="面食米线">面食米线 </option>-->
+        <!--<option value ="盖浇煲仔">盖浇煲仔 </option>-->
+        <!--<option value ="快餐炒菜">快餐炒菜</option>-->
+    <!--</select><br><br>-->
+    甜食点心:<input type="radio" name="type" value="0">
+    面食米线:<input type="radio" name="type" value="1">
+    盖浇煲仔:<input type="radio" name="type" value="2">
+    快餐炒菜:<input type="radio" name="type" value="3"><br><br>
+    单价:<input name="price" ><br><br>
+    麻辣程度:<br><br>
+    <!--微辣、 1：中辣、 2：超辣-->
+    微辣:<input type="radio" name="spicydegree" value="0">
+    中辣:<input type="radio" name="spicydegree" value="1">
+    超辣:<input type="radio" name="spicydegree" value="2"><br><br>
+    可否打包:<br><br>
+    打包：<input type="radio" name="ispackage" value="0">&nbsp;&nbsp;不打包<input type="radio" name="ispackage" value="1"><br>
+
+    好评程度:<input name="hotlevel" ><br><br>
+    已售数量:<input name="selectedcount" ><br><br>
+    其他说明:<input name="note" ><br><br>
+
+    <input onclick="add()" type="button" value="确定" />
+</div>
+</body>
+</html>
+<script src="js/jquery-1.12.4.min.js" ></script>
+<script>
+function add () {
+    var foodname=$("input[name='foodname']").val();
+    var type=$("input[name='type']").val();
+    var price=$("input[name='price']").val();
+    var spicydegree=$("input[name='spicydegree']").val();
+    var ispackage=$("input[name='ispackage']").val();
+    var hotlevel=$("input[name='hotlevel']").val();
+    var selectedcount=$("input[name='selectedcount']").val();
+    var note=$("input[name='note']").val();
+    $.ajax({
+        url:'/addfood',
+        type:"post",
+        dataType:"text",
+        data:{"foodname":foodname,"type":type,"price":price,"spicydegree":spicydegree,"ispackage":ispackage,"hotlevel":hotlevel,"selectedcount":selectedcount,"note":note},
+        success:function(data){
+            window.alert("添加成功");
+            window.location.href='/foodinfo'
+        },
+        error:function () {
+            window.alert("添加失败");
+        }
+    });
+};
+
+</script>
